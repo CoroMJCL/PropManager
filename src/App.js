@@ -439,8 +439,6 @@ function PanelAdmin({ onLogout }) {
   const [tabAdmin, setTabAdmin] = useState("solicitudes");
   const [corredoras, setCorredoras] = useState(initCorredoras);
   const [corrDetalleId, setCorrDetalleId] = useState(null);
-  const [modalPlan, setModalPlan] = useState(null);
-
   const pendientes = corredoras.filter(c => c.estado === "pendiente");
   const activas    = corredoras.filter(c => c.estado === "activa");
 
