@@ -439,8 +439,6 @@ function PanelAdmin({ onLogout }) {
   const [tabAdmin, setTabAdmin] = useState("solicitudes");
   const [corredoras, setCorredoras] = useState(initCorredoras);
   const [corrDetalleId, setCorrDetalleId] = useState(null);
-  const [modalPlan, setModalPlan] = useState(null);
-
   const pendientes = corredoras.filter(c => c.estado === "pendiente");
   const activas    = corredoras.filter(c => c.estado === "activa");
 
@@ -1081,15 +1079,314 @@ function PortalCorredora({ usuario, onLogout }) {
 
 // ─── APP ROOT ─────────────────────────────────────────────────────────────────
 
+
+// ─── LANDING PAGE ─────────────────────────────────────────────────────────────
+
+const FONT_L = "-apple-system,'SF Pro Display',BlinkMacSystemFont,'Helvetica Neue',sans-serif";
+const DARK_L = "#0A0A0F";
+const ACCENT_L = "#0071E3";
+const LIGHT_L = "#F5F5F7";
+const WHITE_L = "#FFFFFF";
+const GRAY_L = "#86868B";
+const BORDER_L = "rgba(0,0,0,0.08)";
+
+const PLANES_L = [
+  { id:"basico", nombre:"Básico", uf:"0,5 UF", pesos:"~$18.000", propiedades:20, color:ACCENT_L, popular:false, desc:"Ideal para comenzar" },
+  { id:"estandar", nombre:"Estándar", uf:"0,8 UF", pesos:"~$29.000", propiedades:40, color:"#34C759", popular:true, desc:"El más elegido" },
+  { id:"pro", nombre:"Pro", uf:"1,2 UF", pesos:"~$43.000", propiedades:80, color:"#AF52DE", popular:false, desc:"Para crecer sin límites" },
+  { id:"ilimitado", nombre:"Ilimitado", uf:"1,8 UF", pesos:"~$65.000", propiedades:9999, color:"#FF9500", popular:false, desc:"Portafolio sin tope" },
+];
+
+const MODULOS_L = [
+  { icon:"📋", titulo:"Inventario de Propiedades", desc:"Fotografía cada espacio al inicio y término del arriendo. Genera un acta PDF firmada digitalmente por ambas partes." },
+  { icon:"🏠", titulo:"Gestión de Propiedades", desc:"Ficha completa de cada inmueble: propietario, valor de arriendo, estado y documentos asociados." },
+  { icon:"📄", titulo:"Contratos y Arrendatarios", desc:"Registro de arrendatarios, contratos vigentes, fechas de vencimiento y depósitos de garantía." },
+  { icon:"📊", titulo:"Dashboard Financiero", desc:"Ingresos mensuales, alertas de morosidad y estado de pagos de todo tu portafolio en tiempo real." },
+];
+
+const PASOS_L = [
+  { num:"01", titulo:"Elige tu plan", desc:"Selecciona el plan que se ajusta a tu portafolio de propiedades." },
+  { num:"02", titulo:"Configura tu perfil", desc:"Sube el logo de tu corredora y personaliza tu espacio en minutos." },
+  { num:"03", titulo:"Agrega propiedades", desc:"Registra tus inmuebles, propietarios y arrendatarios." },
+  { num:"04", titulo:"Opera sin papel", desc:"Genera actas, contratos y reportes financieros desde una sola plataforma." },
+];
+
+function LandingNav({ onLogin, onRegistro }) {
+  return (
+    <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:1000, background:"rgba(255,255,255,0.88)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", borderBottom:"0.5px solid "+BORDER_L, fontFamily:FONT_L }}>
+      <div style={{ maxWidth:1100, margin:"0 auto", padding:"0 24px", display:"flex", alignItems:"center", height:52, gap:32 }}>
+        <div style={{ display:"flex", alignItems:"baseline", gap:6, flex:1 }}>
+          <span style={{ fontSize:18, fontWeight:600, color:DARK_L, letterSpacing:-0.5 }}>PropManager</span>
+          <span style={{ fontSize:11, color:GRAY_L, letterSpacing:0.3 }}>by Tempvs7</span>
+        </div>
+        <div style={{ display:"flex", gap:28 }}>
+          {[["Módulos","#modulos"],["Cómo funciona","#como-funciona"],["Planes","#planes"],["Contacto","#contacto"]].map(([label,href]) => (
+            <a key={label} href={href} style={{ fontSize:14, color:GRAY_L, textDecoration:"none", fontWeight:400 }}>{label}</a>
+          ))}
+        </div>
+        <div style={{ display:"flex", gap:10 }}>
+          <button onClick={onRegistro} style={{ background:"transparent", color:DARK_L, border:"1px solid "+BORDER_L, borderRadius:8, padding:"7px 16px", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:FONT_L }}>
+            Registrarse
+          </button>
+          <button onClick={onLogin} style={{ background:ACCENT_L, color:WHITE_L, border:"none", borderRadius:8, padding:"8px 18px", fontSize:13, fontWeight:500, cursor:"pointer", fontFamily:FONT_L }}>
+            Iniciar sesión
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+function LandingHero({ onLogin, onRegistro }) {
+  return (
+    <section style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:WHITE_L, fontFamily:FONT_L, paddingTop:52, textAlign:"center" }}>
+      <div style={{ maxWidth:760, padding:"80px 24px 60px" }}>
+        <div style={{ display:"inline-block", background:"rgba(0,113,227,0.08)", color:ACCENT_L, fontSize:12, fontWeight:500, padding:"5px 14px", borderRadius:99, marginBottom:28, letterSpacing:0.3 }}>
+          Plataforma SaaS para corredores de propiedades
+        </div>
+        <h1 style={{ fontSize:62, fontWeight:700, color:DARK_L, letterSpacing:-2.5, lineHeight:1.06, margin:"0 0 24px", fontFamily:FONT_L }}>
+          Gestiona arriendos<br /><span style={{ color:ACCENT_L }}>sin papel.</span>
+        </h1>
+        <p style={{ fontSize:19, color:GRAY_L, lineHeight:1.6, margin:"0 0 40px", fontWeight:400 }}>
+          Inventarios fotográficos, actas firmadas digitalmente, contratos y reportes financieros. Todo en un solo lugar, desde $18.000 al mes.
+        </p>
+        <div style={{ display:"flex", gap:14, justifyContent:"center", flexWrap:"wrap" }}>
+          <button onClick={onRegistro} style={{ background:ACCENT_L, color:WHITE_L, border:"none", borderRadius:12, padding:"15px 32px", fontSize:16, fontWeight:500, cursor:"pointer", fontFamily:FONT_L }}>
+            Comenzar ahora →
+          </button>
+          <a href="#como-funciona" style={{ display:"inline-flex", alignItems:"center", background:"transparent", color:DARK_L, border:"1.5px solid "+BORDER_L, borderRadius:12, padding:"15px 32px", fontSize:16, fontWeight:500, textDecoration:"none", fontFamily:FONT_L }}>
+            Ver cómo funciona
+          </a>
+        </div>
+        <div style={{ marginTop:56, display:"flex", justifyContent:"center", gap:48, flexWrap:"wrap" }}>
+          {[["4","módulos incluidos"],["100%","digital, sin papel"],["24h","activación del plan"]].map(([n,l]) => (
+            <div key={n} style={{ textAlign:"center" }}>
+              <div style={{ fontSize:32, fontWeight:700, color:DARK_L, letterSpacing:-1 }}>{n}</div>
+              <div style={{ fontSize:13, color:GRAY_L, marginTop:3 }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LandingModulos() {
+  return (
+    <section id="modulos" style={{ background:LIGHT_L, padding:"100px 24px", fontFamily:FONT_L }}>
+      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+        <div style={{ textAlign:"center", marginBottom:60 }}>
+          <h2 style={{ fontSize:44, fontWeight:700, color:DARK_L, letterSpacing:-1.5, margin:"0 0 16px" }}>Todo lo que necesitas</h2>
+          <p style={{ fontSize:18, color:GRAY_L, margin:0 }}>Cuatro módulos integrados. Todos incluidos en cualquier plan.</p>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))", gap:16 }}>
+          {MODULOS_L.map((m,i) => (
+            <div key={i} style={{ background:WHITE_L, borderRadius:18, padding:"28px 24px", border:"0.5px solid "+BORDER_L }}>
+              <div style={{ fontSize:32, marginBottom:16 }}>{m.icon}</div>
+              <div style={{ fontSize:17, fontWeight:600, color:DARK_L, marginBottom:10, letterSpacing:-0.3 }}>{m.titulo}</div>
+              <div style={{ fontSize:14, color:GRAY_L, lineHeight:1.6 }}>{m.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LandingComoFunciona() {
+  return (
+    <section id="como-funciona" style={{ background:WHITE_L, padding:"100px 24px", fontFamily:FONT_L }}>
+      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+        <div style={{ textAlign:"center", marginBottom:60 }}>
+          <h2 style={{ fontSize:44, fontWeight:700, color:DARK_L, letterSpacing:-1.5, margin:"0 0 16px" }}>En 4 pasos simples</h2>
+          <p style={{ fontSize:18, color:GRAY_L, margin:0 }}>Empieza a operar en menos de una hora.</p>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))", gap:0 }}>
+          {PASOS_L.map((p,i) => (
+            <div key={i} style={{ padding:"32px 24px", borderRight: i<3?"0.5px solid "+BORDER_L:"none" }}>
+              <div style={{ fontSize:48, fontWeight:700, color:"rgba(0,113,227,0.1)", letterSpacing:-2, marginBottom:16, lineHeight:1 }}>{p.num}</div>
+              <div style={{ fontSize:17, fontWeight:600, color:DARK_L, marginBottom:10, letterSpacing:-0.3 }}>{p.titulo}</div>
+              <div style={{ fontSize:14, color:GRAY_L, lineHeight:1.6 }}>{p.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LandingPlanes({ onRegistro }) {
+  return (
+    <section id="planes" style={{ background:LIGHT_L, padding:"100px 24px", fontFamily:FONT_L }}>
+      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+        <div style={{ textAlign:"center", marginBottom:60 }}>
+          <h2 style={{ fontSize:44, fontWeight:700, color:DARK_L, letterSpacing:-1.5, margin:"0 0 16px" }}>Planes simples</h2>
+          <p style={{ fontSize:18, color:GRAY_L, margin:0 }}>Precios en UF. Se ajustan automáticamente a la inflación.</p>
+        </div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))", gap:16 }}>
+          {PLANES_L.map(p => (
+            <div key={p.id} style={{ background:WHITE_L, borderRadius:20, padding:"32px 24px", border: p.popular?"2px solid "+p.color:"0.5px solid "+BORDER_L, position:"relative" }}>
+              {p.popular && <div style={{ position:"absolute", top:-12, left:"50%", transform:"translateX(-50%)", background:p.color, color:WHITE_L, fontSize:11, fontWeight:600, padding:"4px 14px", borderRadius:99, whiteSpace:"nowrap" }}>Más elegido</div>}
+              <div style={{ fontSize:13, fontWeight:500, color:p.color, marginBottom:8 }}>{p.desc}</div>
+              <div style={{ fontSize:22, fontWeight:700, color:DARK_L, letterSpacing:-0.5, marginBottom:4 }}>Plan {p.nombre}</div>
+              <div style={{ display:"flex", alignItems:"baseline", gap:6, margin:"16px 0" }}>
+                <span style={{ fontSize:36, fontWeight:700, color:DARK_L, letterSpacing:-1.5 }}>{p.uf}</span>
+                <span style={{ fontSize:14, color:GRAY_L }}>/mes</span>
+              </div>
+              <div style={{ fontSize:13, color:GRAY_L, marginBottom:20 }}>{p.pesos}/mes aprox.</div>
+              <div style={{ borderTop:"0.5px solid "+BORDER_L, paddingTop:20, marginBottom:24 }}>
+                <div style={{ fontSize:14, color:DARK_L, marginBottom:12, display:"flex", gap:8 }}>
+                  <span style={{ color:p.color, fontWeight:700 }}>✓</span>
+                  {p.propiedades === 9999 ? "Propiedades ilimitadas" : `Hasta ${p.propiedades} propiedades`}
+                </div>
+                {["Inventario fotográfico","Actas PDF firmadas","Contratos y arrendatarios","Dashboard financiero"].map(f => (
+                  <div key={f} style={{ fontSize:13, color:GRAY_L, marginBottom:8, display:"flex", gap:8 }}>
+                    <span style={{ color:p.color }}>✓</span>{f}
+                  </div>
+                ))}
+              </div>
+              <button onClick={onRegistro} style={{ width:"100%", background: p.popular?p.color:"transparent", color: p.popular?WHITE_L:DARK_L, border:"1.5px solid "+(p.popular?p.color:BORDER_L), borderRadius:10, padding:"12px", fontSize:14, fontWeight:500, cursor:"pointer", fontFamily:FONT_L }}>
+                Comenzar ahora
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LandingContacto() {
+  const [form, setForm] = useState({ nombre:"", email:"", mensaje:"" });
+  const [enviado, setEnviado] = useState(false);
+  const set = k => v => setForm(p=>({...p,[k]:v}));
+  return (
+    <section id="contacto" style={{ background:WHITE_L, padding:"100px 24px", fontFamily:FONT_L }}>
+      <div style={{ maxWidth:560, margin:"0 auto" }}>
+        <div style={{ textAlign:"center", marginBottom:48 }}>
+          <h2 style={{ fontSize:44, fontWeight:700, color:DARK_L, letterSpacing:-1.5, margin:"0 0 16px" }}>¿Tienes dudas?</h2>
+          <p style={{ fontSize:18, color:GRAY_L, margin:0 }}>Escríbenos y te respondemos en menos de 24 horas.</p>
+        </div>
+        {enviado ? (
+          <div style={{ textAlign:"center", padding:"48px 24px", background:LIGHT_L, borderRadius:18 }}>
+            <div style={{ fontSize:40, marginBottom:16 }}>✓</div>
+            <div style={{ fontSize:18, fontWeight:600, color:DARK_L }}>Mensaje enviado</div>
+            <div style={{ fontSize:14, color:GRAY_L, marginTop:8 }}>Te contactaremos pronto.</div>
+          </div>
+        ) : (
+          <div style={{ background:LIGHT_L, borderRadius:20, padding:"36px 32px" }}>
+            {[["Nombre","nombre","text","Tu nombre"],["Email","email","email","tu@email.cl"]].map(([label,key,type,ph]) => (
+              <div key={key} style={{ marginBottom:16 }}>
+                <label style={{ display:"block", fontSize:13, fontWeight:500, color:DARK_L, marginBottom:6 }}>{label}</label>
+                <input type={type} value={form[key]} onChange={e=>set(key)(e.target.value)} placeholder={ph}
+                  style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid "+BORDER_L, fontSize:14, fontFamily:FONT_L, background:WHITE_L, color:DARK_L, boxSizing:"border-box", outline:"none" }} />
+              </div>
+            ))}
+            <div style={{ marginBottom:24 }}>
+              <label style={{ display:"block", fontSize:13, fontWeight:500, color:DARK_L, marginBottom:6 }}>Mensaje</label>
+              <textarea value={form.mensaje} onChange={e=>set("mensaje")(e.target.value)} placeholder="¿En qué podemos ayudarte?" rows={4}
+                style={{ width:"100%", padding:"11px 14px", borderRadius:10, border:"1px solid "+BORDER_L, fontSize:14, fontFamily:FONT_L, background:WHITE_L, color:DARK_L, boxSizing:"border-box", outline:"none", resize:"vertical" }} />
+            </div>
+            <button onClick={()=>setEnviado(true)} style={{ width:"100%", background:ACCENT_L, color:WHITE_L, border:"none", borderRadius:10, padding:"14px", fontSize:15, fontWeight:500, cursor:"pointer", fontFamily:FONT_L }}>
+              Enviar mensaje
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function LandingFooter() {
+  return (
+    <footer style={{ background:DARK_L, padding:"48px 24px", fontFamily:FONT_L, textAlign:"center" }}>
+      <div style={{ maxWidth:1100, margin:"0 auto" }}>
+        <div style={{ fontSize:20, fontWeight:600, color:WHITE_L, letterSpacing:-0.5, marginBottom:8 }}>PropManager</div>
+        <div style={{ fontSize:13, color:"rgba(255,255,255,.4)", marginBottom:24 }}>Sistema de gestión de arriendos para corredores de propiedades</div>
+        <div style={{ borderTop:"0.5px solid rgba(255,255,255,.08)", paddingTop:24, fontSize:12, color:"rgba(255,255,255,.3)" }}>
+          © {new Date().getFullYear()} PropManager · Desarrollado por{" "}
+          <a href="https://www.tempvs7.cl" target="_blank" rel="noopener noreferrer"
+            style={{ color:"rgba(255,255,255,.6)", textDecoration:"underline", fontWeight:600 }}>
+            TEMPVS7
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function LoginModal({ onClose, onLogin, onRegistro }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const handleLogin = () => {
+    if (email === "admin@tempvs7.cl" && password === "admin123") { onLogin({ rol:"admin" }); onClose(); }
+    else if (email === "contacto@inmsur.cl" && password === "corredora123") { onLogin({ rol:"corredora", corrodoraId:1 }); onClose(); }
+    else setError("Correo o contraseña incorrectos");
+  };
+  return (
+    <div onClick={onClose} style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.5)", backdropFilter:"blur(10px)", zIndex:2000, display:"flex", alignItems:"center", justifyContent:"center", padding:16 }}>
+      <div onClick={e=>e.stopPropagation()} style={{ background:WHITE_L, borderRadius:22, padding:"40px 32px", width:"100%", maxWidth:380, position:"relative", fontFamily:FONT_L }}>
+        <button onClick={onClose} style={{ position:"absolute", top:14, right:16, background:"none", border:"none", cursor:"pointer", fontSize:22, color:GRAY_L, lineHeight:1, fontFamily:FONT_L }}>×</button>
+        <div style={{ textAlign:"center", marginBottom:28 }}>
+          <div style={{ fontSize:22, fontWeight:700, color:DARK_L, letterSpacing:-0.6 }}>Bienvenido</div>
+          <div style={{ fontSize:13, color:GRAY_L, marginTop:4 }}>Ingresa a tu portal PropManager</div>
+        </div>
+        <div style={{ marginBottom:14 }}>
+          <label style={{ display:"block", fontSize:12, fontWeight:500, color:DARK_L, marginBottom:5 }}>Correo electrónico</label>
+          <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="tu@empresa.cl"
+            style={{ width:"100%", padding:"11px 13px", borderRadius:10, border:"1.5px solid "+(error?"#FF3B30":BORDER_L), fontSize:14, fontFamily:FONT_L, outline:"none", boxSizing:"border-box", color:DARK_L }} />
+        </div>
+        <div style={{ marginBottom:16 }}>
+          <label style={{ display:"block", fontSize:12, fontWeight:500, color:DARK_L, marginBottom:5 }}>Contraseña</label>
+          <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••"
+            style={{ width:"100%", padding:"11px 13px", borderRadius:10, border:"1.5px solid "+(error?"#FF3B30":BORDER_L), fontSize:14, fontFamily:FONT_L, outline:"none", boxSizing:"border-box", color:DARK_L }} />
+        </div>
+        {error && <div style={{ fontSize:12, color:"#FF3B30", marginBottom:12, textAlign:"center" }}>{error}</div>}
+        <button onClick={handleLogin} style={{ width:"100%", background:ACCENT_L, color:WHITE_L, border:"none", borderRadius:10, padding:"13px", fontSize:15, fontWeight:500, cursor:"pointer", fontFamily:FONT_L, marginBottom:16 }}>
+          Ingresar
+        </button>
+        <div style={{ textAlign:"center", borderTop:"0.5px solid "+BORDER_L, paddingTop:16 }}>
+          <span style={{ fontSize:13, color:GRAY_L }}>¿No tienes cuenta? </span>
+          <button onClick={()=>{ onClose(); onRegistro(); }} style={{ fontSize:13, color:ACCENT_L, fontWeight:600, background:"none", border:"none", cursor:"pointer", fontFamily:FONT_L }}>
+            Regístrate
+          </button>
+        </div>
+        <div style={{ marginTop:12, background:"rgba(0,113,227,0.06)", borderRadius:8, padding:"8px 12px", fontSize:11, color:GRAY_L, textAlign:"center" }}>
+          Demo: admin@tempvs7.cl / admin123
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Landing({ onLogin, onRegistro }) {
+  const [showLogin, setShowLogin] = useState(false);
+  return (
+    <div style={{ fontFamily:FONT_L }}>
+      <LandingNav onLogin={()=>setShowLogin(true)} onRegistro={onRegistro} />
+      <LandingHero onLogin={()=>setShowLogin(true)} onRegistro={onRegistro} />
+      <LandingModulos />
+      <LandingComoFunciona />
+      <LandingPlanes onRegistro={onRegistro} />
+      <LandingContacto />
+      <LandingFooter />
+      {showLogin && <LoginModal onClose={()=>setShowLogin(false)} onLogin={onLogin} onRegistro={()=>{ setShowLogin(false); onRegistro(); }} />}
+    </div>
+  );
+}
+
+// ─── APP ROOT ─────────────────────────────────────────────────────────────────
+
 export default function App() {
-  const [pantalla, setPantalla] = useState("login"); // login | registro | portal
+  const [pantalla, setPantalla] = useState("landing");
   const [usuario, setUsuario] = useState(null);
 
   const handleLogin = (u) => { setUsuario(u); setPantalla("portal"); };
-  const handleLogout = () => { setUsuario(null); setPantalla("login"); };
+  const handleLogout = () => { setUsuario(null); setPantalla("landing"); };
 
-  if (pantalla === "login")   return <LoginScreen onLogin={handleLogin} onRegistro={() => setPantalla("registro")} />;
-  if (pantalla === "registro") return <RegistroScreen onVolver={() => setPantalla("login")} />;
+  if (pantalla === "landing")   return <Landing onLogin={handleLogin} onRegistro={() => setPantalla("registro")} />;
+  if (pantalla === "registro")  return <RegistroScreen onVolver={() => setPantalla("landing")} />;
   if (pantalla === "portal" && usuario?.rol === "admin")     return <PanelAdmin onLogout={handleLogout} />;
   if (pantalla === "portal" && usuario?.rol === "corredora") return <PortalCorredora usuario={usuario} onLogout={handleLogout} />;
   return null;
