@@ -25,8 +25,6 @@ const DATOS_BANCARIOS = {
   email: "pagos@tempvs7.cl",
 };
 
-
-
 const initCorredoras = [
   { id: 1, empresa: "Inmobiliaria Sur Ltda.", rut: "76.123.456-7", email: "contacto@inmsur.cl", telefono: "+56 9 8765 4321", plan: "pro", estado: "activa", logo: null, fechaVenc: "2025-08-15", comprobante: null, modulosExtra: [] },
   { id: 2, empresa: "Propiedades Centro S.A.", rut: "76.987.654-3", email: "admin@propcentro.cl", telefono: "+56 9 1234 5678", plan: "basico", estado: "pendiente", logo: null, fechaVenc: null, comprobante: "comprobante_pendiente.jpg", modulosExtra: [] },
@@ -175,74 +173,6 @@ function Btn({ children, onClick, variant = "primary", size = "md", icon, disabl
       {icon && <Icon name={icon} size={14} color="currentColor" />}
       {children}
     </button>
-  );
-}
-
-// ─── PANTALLA LOGIN ───────────────────────────────────────────────────────────
-
-function LoginScreen({ onLogin, onRegistro }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const handleLogin = () => {
-    if (email === "admin@tempvs7.cl" && password === "admin123") {
-      onLogin({ rol: "admin", nombre: "Administrador Tempvs7" });
-    } else if (email === "contacto@inmsur.cl" && password === "corredora123") {
-      onLogin({ rol: "corredora", nombre: "Inmobiliaria Sur Ltda.", corrodoraId: 1 });
-    } else {
-      setError("Correo o contraseña incorrectos");
-    }
-  };
-
-  return (
-    <div style={{ minHeight: "100vh", background: "#F2F2F7", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', sans-serif", padding: 16 }}>
-      <div style={{ width: "100%", maxWidth: 400 }}>
-
-        {/* Wordmark */}
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <div style={{ display: "inline-block" }}>
-            <div style={{ fontSize: 32, fontWeight: 700, color: "#1A1A2E", letterSpacing: -1.2, fontFamily: "-apple-system, 'SF Pro Display', BlinkMacSystemFont, sans-serif", lineHeight: 1 }}>
-              PropManager
-            </div>
-            <div style={{ fontSize: 11, color: "#B0B8C1", letterSpacing: 2.5, textTransform: "uppercase", marginTop: 5, fontWeight: 500, textAlign: "center" }}>
-              by Tempvs7
-            </div>
-          </div>
-        </div>
-
-        {/* Card */}
-        <div style={{ background: "#fff", borderRadius: 20, border: "none", padding: "32px 28px 24px", boxShadow: "0 1px 3px rgba(0,0,0,.08), 0 8px 32px rgba(0,0,0,.06)" }}>
-          <h2 style={{ fontSize: 19, fontWeight: 600, color: "#1A1A2E", margin: "0 0 4px", letterSpacing: -0.3 }}>Iniciar sesión</h2>
-          <p style={{ color: "#9CA3AF", fontSize: 13, margin: "0 0 24px" }}>Ingresa tus credenciales para continuar</p>
-
-          <Input label="Correo electrónico" value={email} onChange={setEmail} placeholder="tu@empresa.cl" type="email" />
-          <Input label="Contraseña" value={password} onChange={setPassword} placeholder="••••••••" type="password" />
-
-          {error && (
-            <div style={{ background: "#FEF2F2", border: "1px solid #FECACA", borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#DC2626", marginBottom: 16, display: "flex", gap: 8, alignItems: "center" }}>
-              <Icon name="alert" size={14} color="#DC2626" /> {error}
-            </div>
-          )}
-
-          <Btn fullWidth onClick={handleLogin} variant="primary" size="lg">Ingresar al sistema</Btn>
-
-          <div style={{ textAlign: "center", marginTop: 20, paddingTop: 20, borderTop: "1px solid #F3F4F6" }}>
-            <span style={{ fontSize: 13, color: "#9CA3AF" }}>¿No tienes cuenta? </span>
-            <button onClick={onRegistro} style={{ fontSize: 13, color: "#1A1A2E", fontWeight: 700, background: "none", border: "none", cursor: "pointer", fontFamily: "-apple-system, 'SF Pro Text', BlinkMacSystemFont, 'Helvetica Neue', sans-serif" }}>
-              Regístrate aquí
-            </button>
-          </div>
-        </div>
-
-        {/* Demo hint */}
-        <div style={{ marginTop: 16, background: "#F0FDF4", border: "1px solid #BBF7D0", borderRadius: 10, padding: "12px 16px" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#065F46", marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>Demo — Credenciales de prueba</div>
-          <div style={{ fontSize: 12, color: "#059669" }}>Admin: admin@tempvs7.cl / admin123</div>
-          <div style={{ fontSize: 12, color: "#059669" }}>Corredora: contacto@inmsur.cl / corredora123</div>
-        </div>
-      </div>
-    </div>
   );
 }
 
