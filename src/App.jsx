@@ -25,6 +25,8 @@ const DATOS_BANCARIOS = {
   email: "pagos@tempvs7.cl",
 };
 
+
+
 const initCorredoras = [
   { id: 1, empresa: "Inmobiliaria Sur Ltda.", rut: "76.123.456-7", email: "contacto@inmsur.cl", telefono: "+56 9 8765 4321", plan: "pro", estado: "activa", logo: null, fechaVenc: "2025-08-15", comprobante: null, modulosExtra: [] },
   { id: 2, empresa: "Propiedades Centro S.A.", rut: "76.987.654-3", email: "admin@propcentro.cl", telefono: "+56 9 1234 5678", plan: "basico", estado: "pendiente", logo: null, fechaVenc: null, comprobante: "comprobante_pendiente.jpg", modulosExtra: [] },
